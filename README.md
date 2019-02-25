@@ -16,3 +16,5 @@ _MM_        YMMMM9 _MM_     YMMMM9   YMMMM9 _MM_  _MM_ YMMM9  YMMMM9  `YMMM9'Yb_
 Autor: Caupo Helvik
 Eesmärk: Pakkuda kasutajatele protsentarvutus võimekusi, lisaks kuvades valemeid, kuidas mingi tulemus leiti, mis paljudel lehtedel pole kuvatud.
 Ekraanitõmmis: https://i.imgur.com/gpzrF8s.png
+
+Lisaks asi lives: https://percentcalc.net
