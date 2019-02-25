@@ -1,0 +1,99 @@
+
+body {
+	font-family: Open Sans;
+}
+h1 { font-size: 27px; }
+h1, h3 {
+	font-weight: normal;
+}
+em {
+	font-style: normal;
+	font-weight: normal;
+	color: #1260e8;
+}
+.content {
+	max-width: 800px;
+	margin: 0 auto;
+}
+.block {
+	padding: 40px 0;
+	border-bottom: 1px solid #EEE;
+	text-align: center;
+	position: relative;
+}
+input {
+	border: none;
+	border-bottom: 1px solid #B4B4B4;
+	font-weight: bold;
+	text-align: center;
+}
+input:focus {
+	border-bottom: 1px solid #1260e8;
+}
+.pull-left {
+	position: absolute;
+	left: 0;
+}
+.pull-right {
+	position: absolute;
+	right: 0;
+}
+
+#privacy {
+	font-weight: bold;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+#privacy:hover {
+	color: #1260e8;
+}
+.answer {
+	font-size: 20px;
+}
+.adsbygoogle { text-align: center; }
+
+@media only screen and (max-width: 500px) {
+	input { width: 75px; }
+	.content { margin: 10px; }
+}
+ 
+.spons a {
+	border: 1px solid #CCC;
+	padding: 20px 20px;
+	display: block;
+	text-decoration: none;
+	position: relative;
+}
+.spons a .title {
+	font-size: 2em;
+	font-weight: bold;
+	color: #000;
+}
+.spons a .description {
+	font-size: 1.3em;
+	color: #000;
+}
+.spons a div:last-child {
+	position: absolute;
+	right: 20px;
+	font-size: 5em;
+	top: 5px;
+	font-weight: bold;
+	color: #888888;
+	text-align: center;
+	border-radius: 50%;
+	vertical-align: middle;
+}
+
+@media only screen and (max-width: 800px) {
+	.spons a .title { font-size: 1.5em; }
+	.spons a .description { font-size: 1em; }
+	.spons a div:last-child { font-size: 2.5em; top: 20px; }
+}
+@media only screen and (max-width: 600px) {
+	.spons { text-align: left; }
+}
+@media only screen and (max-width: 500px) {
+	.pull-left, .pull-right { position: relative; display: block; }
+}

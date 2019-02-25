@@ -1,0 +1,23 @@
+{
+  "short_name": "PercentCalc",
+  "name": "PercentCalc.net",
+  "icons": [
+    {
+      "src": "192px.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "512px.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.php",
+  "background_color": "#FFF",
+  "display": "standalone",
+  "scope": "",
+  "theme_color": "#00A2E8",
+  "prefer_related_applications": true
+
+}
