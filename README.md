@@ -1,8 +1,8 @@
 # iseseisev-projekt
 
-Rakenduse nimi: PercentCalc.net  
+Rakenduse nimi: Raamatute järjehoidja  
 Autor: Caupo Helvik  
-Eesmärk: Pakkuda kasutajatele protsentarvutus võimekusi, lisaks kuvades valemeid, kuidas mingi tulemus leiti, mis paljudel lehtedel pole kuvatud.  
-Ekraanitõmmis: https://i.imgur.com/gpzrF8s.png  
+Eesmärk: Kasutajad saaksid oma raamatuid kirja panna kuhu millega pooleli jäädud ja jaotada neid erinevatesse zanritesse või kategooriatesse soovi korral.  
+Ekraanitõmmis: https://i.imgur.com/wUcBbA0.png  
   
-Lisaks asi lives: https://percentcalc.net  
+Lisaks asi lives: https://caupo.ee/raamat  

@@ -1,99 +1,130 @@
-
 body {
-	font-family: Open Sans;
-}
-h1 { font-size: 27px; }
-h1, h3 {
-	font-weight: normal;
-}
-em {
-	font-style: normal;
-	font-weight: normal;
-	color: #1260e8;
-}
-.content {
-	max-width: 800px;
-	margin: 0 auto;
-}
-.block {
-	padding: 40px 0;
-	border-bottom: 1px solid #EEE;
-	text-align: center;
-	position: relative;
-}
-input {
-	border: none;
-	border-bottom: 1px solid #B4B4B4;
-	font-weight: bold;
-	text-align: center;
-}
-input:focus {
-	border-bottom: 1px solid #1260e8;
-}
-.pull-left {
-	position: absolute;
-	left: 0;
-}
-.pull-right {
-	position: absolute;
-	right: 0;
+	background: #eee;
+	font-family: Roboto, Arial;
 }
 
-#privacy {
-	font-weight: bold;
-	background: none;
+.container {
+	margin: 0 auto;
+	width: 800px;
+	background: #FFF;
+	padding: 8px;
+	min-height: 400px;
+	box-shadow: 0px 2px 5px #AFAFAF;
+}
+
+#jarjehoidja {
+	margin: 20px 0;
+}
+
+.zanr {
+    display: none;
+    background: #333;
+    color: #FFF;
+    width: 100%;
+}
+
+#zanr-tabs span {
+    color: #FFF;
+    background: #333;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 4px 12px;
+	cursor: pointer;
+	transition: 0.2s ease;
+}
+#zanr-tabs span:hover { background: #666; }
+#zanr-tabs span.active {
+    color: #FFF;
+    background: #bb153b;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 4px 12px;
+}
+
+.zanr.active {
+	display: block;
+}
+
+.book-inputs-container {
+	display: flex;
+}
+
+table {
+	width: 100%;
+}
+table th, table td {
+	width: 26%;
+}
+
+input {
+    padding: 2px 10px;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    margin: 2px;
+    font-size: 1em;
+	flex: 1;
+}
+
+input[type=button] {
+    color: #FFF;
+    background: #bb153b;
 	border: none;
 	cursor: pointer;
+	transition: 0.1s ease;
 }
-#privacy:hover {
-	color: #1260e8;
-}
-.answer {
-	font-size: 20px;
-}
-.adsbygoogle { text-align: center; }
-
-@media only screen and (max-width: 500px) {
-	input { width: 75px; }
-	.content { margin: 10px; }
-}
- 
-.spons a {
-	border: 1px solid #CCC;
-	padding: 20px 20px;
-	display: block;
-	text-decoration: none;
-	position: relative;
-}
-.spons a .title {
-	font-size: 2em;
-	font-weight: bold;
-	color: #000;
-}
-.spons a .description {
-	font-size: 1.3em;
-	color: #000;
-}
-.spons a div:last-child {
-	position: absolute;
-	right: 20px;
-	font-size: 5em;
-	top: 5px;
-	font-weight: bold;
-	color: #888888;
-	text-align: center;
-	border-radius: 50%;
-	vertical-align: middle;
+input[type=button]:hover {
+    background: #d52f55;
 }
 
-@media only screen and (max-width: 800px) {
-	.spons a .title { font-size: 1.5em; }
-	.spons a .description { font-size: 1em; }
-	.spons a div:last-child { font-size: 2.5em; top: 20px; }
+table input {
+	color: #FFF;
+	background: #555;
+	border: none;
 }
-@media only screen and (max-width: 600px) {
-	.spons { text-align: left; }
+
+table td:last-child, table th:last-child {
+	min-width: 66px;
+	max-width: 66px;
 }
-@media only screen and (max-width: 500px) {
-	.pull-left, .pull-right { position: relative; display: block; }
+
+@media only screen and (max-width: 850px) {
+	.container {
+		width: 100%;
+		padding: 0;
+	}
+	h1, body {
+		margin: 0;
+	}
+	h1 {
+		font-size: 1.3em;
+	}
+	th {
+		font-size: 0.9em;
+	}
+}
+
+@media only screen and (max-width: 650px) {
+	input[type=text] {
+		padding: 0;
+		max-width: 120px;
+	}
+	input {
+		font-size: 0.8em;
+	}
+	table th, table td {
+		width: auto;
+	}
+	
+	.book-inputs-container {
+		display: inline-block;
+	}
+}
+
+@media only screen and (max-width: 530px) {
+	table th, table td {
+		max-width: 80px;
+	}
+	input[type=text] {
+		width: 100%;
+	}
 }
