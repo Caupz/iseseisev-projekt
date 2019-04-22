@@ -7,8 +7,8 @@ let zanrTabs = document.querySelector("#zanr-tabs");
 let zanrs = JSON.parse(localStorage.getItem("zanrs"));
 let books = JSON.parse(localStorage.getItem("books"));
 
-if(!zanrs.some(item => item.name === 'Loetud')) {
-	AddToZanrs("loetud", "Loetud");
+if(!zanrs.some(item => item.name === 'Lugemisel')) {
+	AddToZanrs("lugemisel", "Lugemisel", true);
 }
 
 if(zanrs === null || zanrs === undefined) { zanrs = []; }
@@ -52,14 +52,20 @@ function CreateZanr(zanrId, zanrName) {
 	bookTh.innerText = "Raamatu nimi";
 	bookTr.appendChild(bookTh);
 	bookTh = document.createElement("th");
-	bookTh.innerText = "Lehekülg";
+	bookTh.innerText = "LK";
 	bookTr.appendChild(bookTh);
 	bookTh = document.createElement("th");
 	bookTh.innerText = "LK Kokku";
 	bookTr.appendChild(bookTh);
+	
 	bookTh = document.createElement("th");
 	bookTh.innerText = "Lühikirjeldus";
 	bookTr.appendChild(bookTh);
+	
+	bookTh = document.createElement("th");
+	bookTh.innerText = "Zanr";
+	bookTr.appendChild(bookTh);
+	
 	bookTh = document.createElement("th"); // btnite jaoks
 	bookTr.appendChild(bookTh);
 	bookThead.appendChild(bookTr);
@@ -75,16 +81,32 @@ function CreateZanr(zanrId, zanrName) {
 	bookName.placeholder = "Raamatu nimi";
 	let bookLk = document.createElement("input");
 	bookLk.className = "book-lk";
-	bookLk.placeholder = "Leheküljel";
+	bookLk.placeholder = "LK";
 	bookLk.type = "number";
 	let bookLkTotal = document.createElement("input");
 	bookLkTotal.className = "book-lk";
 	bookLkTotal.placeholder = "LK Kokku";
 	bookLkTotal.type = "number";
+	
 	let bookDesc = document.createElement("input");
 	bookDesc.className = "book-desc";
 	bookDesc.placeholder = "Lühikirjeldus";
 	bookDesc.type = "text";
+	
+	let bookDestZanr = document.createElement("select");
+	
+	for(let i = 0; i < zanrs.length; i++) {
+		if(zanrs[i].name == "Lugemisel" || zanrs[i].name == "Loetud") { continue; }
+		let optionElement = document.createElement("option");
+		optionElement.innerText = zanrs[i].name;
+		optionElement.value = zanrs[i].id;
+		bookDestZanr.appendChild(optionElement);
+	}
+	
+	bookDestZanr.className = "book-destination-zarn";
+	bookDestZanr.placeholder = "Zanr";
+	bookDestZanr.type = "text";
+	
 	let bookAdd = document.createElement("input");
 	bookAdd.type = "button";
 	bookAdd.value = "Lisa raamat";
@@ -98,13 +120,16 @@ function CreateZanr(zanrId, zanrName) {
 			alert("Lehekülgede kogus on suurem kui raamatus lehekülgede arv kokku!");
 			return;
 		}
-		CreateBook(bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookTbody, books.length);
-		AddToBooks(zanrId, bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value);
+		
+		console.log(bookTbody);
+		CreateBook(bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookDestZanr.value, bookTbody, books.length);
+		AddToBooks(zanrId, bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookDestZanr.value);
 		
 		bookName.value = "";
 		bookLk.value = "";
 		bookLkTotal.value = "";
 		bookDesc.value = "";
+		bookDestZanr.value = "";
 	});
 	
 	// Zanri ja selle tabi aktiveerimine
@@ -121,6 +146,7 @@ function CreateZanr(zanrId, zanrName) {
 	inputContainer.appendChild(bookLk);
 	inputContainer.appendChild(bookLkTotal);
 	inputContainer.appendChild(bookDesc);
+	inputContainer.appendChild(bookDestZanr);
 	inputContainer.appendChild(bookAdd);
 	zanrBlock.appendChild(inputContainer);
 	
@@ -128,22 +154,25 @@ function CreateZanr(zanrId, zanrName) {
 	jarjehoidja.appendChild(zanrBlock);
 }
 
-function AddToBooks(zanrId, bookTitle, bookPage, bookPagesTotal, bookDescription) {
-	let book = {"zanr":zanrId, "name":bookTitle, "lk":bookPage, "lkTotal":bookPagesTotal, "description":bookDescription};
+function AddToBooks(zanrId, bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestZanrId) {
+	let book = {"zanr":zanrId, "name":bookTitle, "lk":bookPage, "lkTotal":bookPagesTotal, "description":bookDescription,"destZanr":bookDestZanrId};
 	books.push(book);
 	localStorage.setItem("books", JSON.stringify(books));
 }
 
-function AddToZanrs(zanrId, zanrName) {
+function AddToZanrs(zanrId, zanrName, atBeginning = false) {
 	let zanr = {"id":zanrId, "name":zanrName};
-	zanrs.push(zanr);
+	if(atBeginning) {
+		zanrs.unshift(zanr);
+	} else {
+		zanrs.push(zanr);
+	}
 	localStorage.setItem("zanrs", JSON.stringify(zanrs));
 }
 
-function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbody, bookIndex) {
-	if(bookPagesTotal === undefined || bookPagesTotal === null) {
-		bookPagesTotal = 0;
-	}
+function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestinationZanr, tbody, bookIndex) {
+	if(bookPagesTotal === undefined || bookPagesTotal === null) { bookPagesTotal = 0; }
+	if(bookDestinationZanr === undefined || bookDestinationZanr === null) { bookDestinationZanr = zanrs[1].id; }
 	
 	let bNameContainer = document.createElement("td");
 	let bName = document.createElement("input");
@@ -163,12 +192,29 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbody,
 	bLkTotal.id = "book-lk-total-"+bookIndex;
 	bLkTotal.type = "text";
 	bLkTotalContainer.appendChild(bLkTotal);
+	
 	let bDescContainer = document.createElement("td");
 	let bDesc = document.createElement("input");
 	bDesc.value = bookDescription;
 	bDesc.id = "book-desc-"+bookIndex;
 	bDesc.type = "text";
 	bDescContainer.appendChild(bDesc);
+	
+	let bDestZanrContainer = document.createElement("td");
+	let bDestZanr = document.createElement("select");
+	
+	for(let i = 0; i < zanrs.length; i++) {
+		if(zanrs[i].name == "Lugemisel" || zanrs[i].name == "Loetud") { continue; }
+		let optionElement = document.createElement("option");
+		optionElement.innerText = zanrs[i].name;
+		optionElement.value = zanrs[i].id;
+		bDestZanr.appendChild(optionElement);
+	}
+	
+	bDestZanr.value = bookDestinationZanr;
+	bDestZanr.id = "book-dest-zanr-"+bookIndex;
+	bDestZanrContainer.appendChild(bDestZanr);
+	
 	let bBtnContainer = document.createElement("td");
 	let bEdit = document.createElement("input");
 	bBtnContainer.appendChild(bEdit);
@@ -185,6 +231,7 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbody,
 		books[bookIndex].lk = bLk.value;
 		books[bookIndex].lkTotal = bLkTotal.value;
 		books[bookIndex].description = bDesc.value;
+		books[bookIndex].destZanr = bDestZanr.value;
 		localStorage.setItem("books", JSON.stringify(books));
 	});
 	let bDelete = document.createElement("input");
@@ -204,11 +251,17 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbody,
 	bDone.value = "✔️";
 	bDone.addEventListener("click", function() {
 		bRow.parentElement.removeChild(bRow);
-		books[bookIndex].zanr = "loetud";
+		let destZanrId = books[bookIndex].destZanr;
+		if(books[bookIndex].zanr == destZanrId) {
+			books[bookIndex].zanr = "lugemisel";
+			destZanrId = "lugemisel";
+		} else {
+			books[bookIndex].zanr = destZanrId;
+		}
 		localStorage.setItem("books", JSON.stringify(books));
 		
-		let tbodyElement = document.querySelector("#zanr-loetud table tbody");
-		CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbodyElement, bookIndex);
+		let tbodyElement = document.querySelector("#zanr-"+destZanrId+" table tbody");
+		CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestinationZanr, tbodyElement, bookIndex);
 	});
 	
 	bRow.className = "book zanr-book-row-"+bookIndex;
@@ -216,7 +269,10 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbody,
 	bRow.appendChild(bLkContainer);
 	bRow.appendChild(bLkTotalContainer);
 	bRow.appendChild(bDescContainer);
+	bRow.appendChild(bDestZanrContainer);
 	bRow.appendChild(bBtnContainer);
+	console.log("tbody");
+	console.log(tbody);
 	tbody.appendChild(bRow);
 }
 
@@ -237,7 +293,7 @@ function RenderBooks() {
 	DeleteAllBookDOMs();
 	for(let i = 0, book; book = books[i]; i++) {
 		let tbodyElement = document.querySelector("#zanr-"+book.zanr+" table tbody");
-		CreateBook(book.name, book.lk, book.lkTotal, book.description, tbodyElement, i);
+		CreateBook(book.name, book.lk, book.lkTotal, book.description, book.destZanr, tbodyElement, i);
 	}
 }
 
@@ -291,4 +347,10 @@ function Search() {
 (function() {
    RenderZanrs();
    RenderBooks();
+   HideZanrs();
+   let el = document.querySelector("#zanr-tabs span");
+   console.log(el);
+   if(el !== undefined && el !== null) {
+	   el.click();
+   }
 })();
