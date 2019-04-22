@@ -14,9 +14,6 @@ if(!zanrs.some(item => item.name === 'Loetud')) {
 if(zanrs === null || zanrs === undefined) { zanrs = []; }
 if(books === null || books === undefined) { books = []; }
 
-console.log(zanrs);
-console.log(books);
-
 if(zanrAdd !== null && zanrAdd !== undefined) {
 	zanrAdd.addEventListener("click", function() {
 		let zanrId = zanrValue.value.replace(/[^a-z0-9]/gi,'');
@@ -96,6 +93,7 @@ function CreateZanr(zanrId, zanrName) {
 	
 	// Raamatu lisamine
 	bookAdd.addEventListener("click", function() {
+		if(isNaN(bookLk.value) || isNaN(bookLkTotal.value) || bookLk.value == "" || bookLkTotal.value == "" || bookName.value == "") { return; }
 		if(bookLk.value > bookLkTotal.value) {
 			alert("Lehekülgede kogus on suurem kui raamatus lehekülgede arv kokku!");
 			return;
@@ -177,6 +175,7 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, tbody,
 	bEdit.type = "button";
 	bEdit.value = "✏️";
 	bEdit.addEventListener("click", function() {
+		if(isNaN(bLk.value) || isNaN(bLkTotal.value) || bLk.value == "" || bLkTotal.value == "" || bName.value == "") { return; }
 		if(bLk.value > bLkTotal.value) {
 			alert("Lehekülgede kogus on suurem kui raamatus lehekülgede arv kokku!");
 			return;
