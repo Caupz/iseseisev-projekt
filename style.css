@@ -10,6 +10,7 @@ body {
 	padding: 8px;
 	min-height: 400px;
 	box-shadow: 0px 2px 5px #AFAFAF;
+	position: relative;
 }
 
 #jarjehoidja {
@@ -21,6 +22,17 @@ body {
     background: #333;
     color: #FFF;
     width: 100%;
+}
+
+.btnAdd {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background: #BB153B;
+	color: #FFF;
+	border: none;
+	padding: 4px 8px;
+	border-radius: 4px;
 }
 
 #zanr-tabs span {
@@ -45,10 +57,6 @@ body {
 	display: block;
 }
 
-.book-inputs-container {
-	display: flex;
-}
-
 table {
 	width: 100%;
 }
@@ -57,12 +65,11 @@ table th, table td {
 }
 
 input {
-    padding: 2px 10px;
+    padding: 2px 0px;
     border-radius: 4px;
     border: 1px solid #DDD;
     margin: 2px;
     font-size: 1em;
-	flex: 1;
 }
 
 input[type=button] {
@@ -71,6 +78,7 @@ input[type=button] {
 	border: none;
 	cursor: pointer;
 	transition: 0.1s ease;
+	padding: 2px 2px;
 }
 input[type=button]:hover {
     background: #d52f55;
@@ -83,8 +91,8 @@ table input {
 }
 
 table td:last-child, table th:last-child {
-	min-width: 66px;
-	max-width: 66px;
+	min-width: 90px;
+	max-width: 90px;
 }
 
 @media only screen and (max-width: 850px) {
