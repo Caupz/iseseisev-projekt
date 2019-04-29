@@ -3,6 +3,8 @@ let zanrAdd = document.querySelector("#zanr");
 let zanrValue = document.querySelector("#zanr-name");
 let jarjehoidja = document.querySelector("#jarjehoidja");
 let zanrTabs = document.querySelector("#zanr-tabs");
+var lugemiseZanriBlock = null;
+var lugemiseZanriTab = null;
 
 let zanrs = JSON.parse(localStorage.getItem("zanrs"));
 let books = JSON.parse(localStorage.getItem("books"));
@@ -16,7 +18,12 @@ if(books === null || books === undefined) { books = []; }
 if(zanrAdd !== null && zanrAdd !== undefined) {
 	zanrAdd.addEventListener("click", function() {
 		let zanrId = zanrValue.value.replace(/[^a-z0-9]/gi,'');
-		// kontroll kas juba on olemas.
+		
+		let existingBlock = document.querySelector("#zanr-"+zanrId);
+		if(existingBlock !== null && existingBlock !== undefined) {
+			alert("Selline zanr on juba olemas! ("+zanrId+")");
+			return;
+		}
 		CreateZanr(zanrId, zanrValue.value);
 		AddToZanrs(zanrId, zanrValue.value);
 	});
@@ -26,14 +33,6 @@ if(saerchBtn !== null && saerchBtn !== undefined) {
 }
 
 function CreateZanr(zanrId, zanrName) {
-	let existingBlock = document.querySelector("#zanr-"+zanrId);
-	if(existingBlock !== null && existingBlock !== undefined) {
-		if(zanrId != "lugemisel" && zanrId != "loetud") {
-			alert("Selline zanr on juba olemas! ("+zanrId+")");	
-		}
-		return;
-	}
-	
 	HideZanrs();
 
 	// põhi kontainerid jms
@@ -41,7 +40,12 @@ function CreateZanr(zanrId, zanrName) {
 	zanrBlock.classList.add("zanr");
 	zanrBlock.classList.add("active");
 	zanrBlock.id = "zanr-"+zanrId;
+	
 	let zanrLabel = document.createElement("span");
+	if(zanrId == "lugemisel") {
+		lugemiseZanriBlock = zanrBlock;
+		lugemiseZanriTab = zanrLabel;
+	}
 	
 	if(zanrName != "Loetud" && zanrName != "Lugemisel") {
 		let zanrDeleteItem = document.createElement("input");
@@ -175,22 +179,22 @@ function RemoveZanrById(zanrId) {
 	if(!confirmed) return;
 	
 	for(let i = 0; i < books.length; i++) {
-		console.log(books[i], zanrId);
 		if(books[i].zanr == zanrId) {
 			books[i].zanr = "loetud";
-			console.log(books[i].name+" "+zanrId);
 		}
 	}
 	localStorage.setItem("books", JSON.stringify(books));
 	
-	console.log("beforeDelete", zanrs);
 	for(let i = 0, zanr; zanr = zanrs[i]; i++) {
 		if(zanr.id == zanrId) {
 			zanrs.splice(i, 1);
+			let zanrBlock = document.querySelector("#zanr-"+zanrId);
+			if(zanrBlock !== undefined && zanrBlock !== null) {
+				zanrBlock.parentElement.removeChild(zanrBlock);
+			}
 			break;
 		}
 	}
-	console.log("afterDelete", zanrs);
 	localStorage.setItem("zanrs", JSON.stringify(zanrs));
 	ReRenderEverything();
 }
@@ -329,8 +333,12 @@ function DeleteAllBookDOMs() {
 }
 
 function DeleteAllZanrDOMs() {
-	let zTabs = document.querySelector("#zanr-tabs");
+	let zTabs = document.querySelectorAll("#zanr-tabs span");
 	for(let i = 0, zanr; zanr = zTabs[i]; i++) {
+		zanr.parentElement.removeChild(zanr);
+	}
+	let zBlocks = document.querySelectorAll(".zanr");
+	for(let i = 0, zanr; zanr = zBlocks[i]; i++) {
 		zanr.parentElement.removeChild(zanr);
 	}
 }
@@ -393,6 +401,15 @@ function Search() {
 	}
 }
 
+function SetLugemiselActive() {
+	if(lugemiseZanriTab !== undefined && lugemiseZanriTab !== null) {
+		lugemiseZanriTab.classList.add("active");
+	}
+	if(lugemiseZanriBlock !== undefined && lugemiseZanriBlock !== null) {
+		lugemiseZanriBlock.classList.add("active");
+	}
+}
+
 (function() {
 	ReRenderEverything();
 })();
@@ -403,8 +420,5 @@ function ReRenderEverything() {
 	RenderZanrs();
 	RenderBooks();
 	HideZanrs();
-	let el = document.querySelector("#zanr-tabs span");
-	if(el !== undefined && el !== null) {
-		el.click();
-	}
+	setTimeout(SetLugemiselActive, 200);
 }
