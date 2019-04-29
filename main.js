@@ -142,6 +142,7 @@ function CreateZanr(zanrId, zanrName) {
 			return;
 		}
 		
+		console.log("TBODY 1", bookTbody);
 		CreateBook(bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookDestZanr.value, bookTbody, books.length);
 		AddToBooks(zanrId, bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookDestZanr.value);
 		
@@ -306,6 +307,10 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 		localStorage.setItem("books", JSON.stringify(books));
 		
 		let tbodyElement = document.querySelector("#zanr-"+destZanrId+" table tbody");
+		if(tbodyElement === null) {
+			tbodyElement = document.querySelector("#zanr-loetud table tbody");
+		}
+		console.log("TBODY 2", tbodyElement);
 		CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestinationZanr, tbodyElement, bookIndex);
 	});
 	
@@ -350,6 +355,7 @@ function RenderBooks() {
 		if(tbodyElement === null) {
 			tbodyElement = document.querySelector("#zanr-loetud table tbody");
 		}
+		console.log("TBODY 3", tbodyElement);
 		CreateBook(book.name, book.lk, book.lkTotal, book.description, book.destZanr, tbodyElement, i);
 	}
 }
