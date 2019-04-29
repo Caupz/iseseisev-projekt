@@ -7,9 +7,8 @@ let zanrTabs = document.querySelector("#zanr-tabs");
 let zanrs = JSON.parse(localStorage.getItem("zanrs"));
 let books = JSON.parse(localStorage.getItem("books"));
 
-if(!zanrs.some(item => item.name === 'Lugemisel')) {
-	AddToZanrs("lugemisel", "Lugemisel", true);
-}
+if(!zanrs.some(item => item.name === 'Lugemisel')) { AddToZanrs("lugemisel", "Lugemisel", true); }
+if(!zanrs.some(item => item.name === 'Loetud')) { AddToZanrs("loetud", "Loetud", true); }
 
 if(zanrs === null || zanrs === undefined) { zanrs = []; }
 if(books === null || books === undefined) { books = []; }
@@ -29,7 +28,9 @@ if(saerchBtn !== null && saerchBtn !== undefined) {
 function CreateZanr(zanrId, zanrName) {
 	let existingBlock = document.querySelector("#zanr-"+zanrId);
 	if(existingBlock !== null && existingBlock !== undefined) {
-		alert("Selline zanr on juba olemas!");
+		if(zanrId != "lugemisel" && zanrId != "loetud") {
+			alert("Selline zanr on juba olemas! ("+zanrId+")");	
+		}
 		return;
 	}
 	
@@ -41,7 +42,23 @@ function CreateZanr(zanrId, zanrName) {
 	zanrBlock.classList.add("active");
 	zanrBlock.id = "zanr-"+zanrId;
 	let zanrLabel = document.createElement("span");
-	zanrLabel.innerText = zanrName;
+	
+	if(zanrName != "Loetud" && zanrName != "Lugemisel") {
+		let zanrDeleteItem = document.createElement("input");
+		zanrDeleteItem.type = "button";
+		zanrDeleteItem.value = "X";
+		zanrDeleteItem.dataset.value = zanrId;
+		
+		zanrDeleteItem.addEventListener("click", function() {
+			RemoveZanrById(zanrDeleteItem.dataset.value);
+		});
+		zanrLabel.appendChild(zanrDeleteItem);
+	}
+	
+	let zanrLabelText = document.createElement("span");
+	zanrLabelText.innerText = zanrName;
+	zanrLabel.appendChild(zanrLabelText);
+	
 	let booksContainer = document.createElement("div");
 	booksContainer.class = "books";
 	
@@ -121,7 +138,6 @@ function CreateZanr(zanrId, zanrName) {
 			return;
 		}
 		
-		console.log(bookTbody);
 		CreateBook(bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookDestZanr.value, bookTbody, books.length);
 		AddToBooks(zanrId, bookName.value, bookLk.value, bookLkTotal.value, bookDesc.value, bookDestZanr.value);
 		
@@ -152,6 +168,31 @@ function CreateZanr(zanrId, zanrName) {
 	
 	zanrBlock.appendChild(booksContainer);
 	jarjehoidja.appendChild(zanrBlock);
+}
+
+function RemoveZanrById(zanrId) {
+	let confirmed = confirm("Kas soovid seda zanri kustutada?");
+	if(!confirmed) return;
+	
+	for(let i = 0; i < books.length; i++) {
+		console.log(books[i], zanrId);
+		if(books[i].zanr == zanrId) {
+			books[i].zanr = "loetud";
+			console.log(books[i].name+" "+zanrId);
+		}
+	}
+	localStorage.setItem("books", JSON.stringify(books));
+	
+	console.log("beforeDelete", zanrs);
+	for(let i = 0, zanr; zanr = zanrs[i]; i++) {
+		if(zanr.id == zanrId) {
+			zanrs.splice(i, 1);
+			break;
+		}
+	}
+	console.log("afterDelete", zanrs);
+	localStorage.setItem("zanrs", JSON.stringify(zanrs));
+	ReRenderEverything();
 }
 
 function AddToBooks(zanrId, bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestZanrId) {
@@ -271,8 +312,6 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 	bRow.appendChild(bDescContainer);
 	bRow.appendChild(bDestZanrContainer);
 	bRow.appendChild(bBtnContainer);
-	console.log("tbody");
-	console.log(tbody);
 	tbody.appendChild(bRow);
 }
 
@@ -289,10 +328,20 @@ function DeleteAllBookDOMs() {
 	}
 }
 
+function DeleteAllZanrDOMs() {
+	let zTabs = document.querySelector("#zanr-tabs");
+	for(let i = 0, zanr; zanr = zTabs[i]; i++) {
+		zanr.parentElement.removeChild(zanr);
+	}
+}
+
 function RenderBooks() {
 	DeleteAllBookDOMs();
 	for(let i = 0, book; book = books[i]; i++) {
 		let tbodyElement = document.querySelector("#zanr-"+book.zanr+" table tbody");
+		if(tbodyElement === null) {
+			tbodyElement = document.querySelector("#zanr-loetud table tbody");
+		}
 		CreateBook(book.name, book.lk, book.lkTotal, book.description, book.destZanr, tbodyElement, i);
 	}
 }
@@ -345,12 +394,17 @@ function Search() {
 }
 
 (function() {
-   RenderZanrs();
-   RenderBooks();
-   HideZanrs();
-   let el = document.querySelector("#zanr-tabs span");
-   console.log(el);
-   if(el !== undefined && el !== null) {
-	   el.click();
-   }
+	ReRenderEverything();
 })();
+
+function ReRenderEverything() {
+	DeleteAllBookDOMs();
+	DeleteAllZanrDOMs();
+	RenderZanrs();
+	RenderBooks();
+	HideZanrs();
+	let el = document.querySelector("#zanr-tabs span");
+	if(el !== undefined && el !== null) {
+		el.click();
+	}
+}

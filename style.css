@@ -5,7 +5,7 @@ body {
 
 .container {
 	margin: 0 auto;
-	width: 800px;
+	width: 1280px;
 	background: #FFF;
 	padding: 8px;
 	min-height: 400px;
@@ -35,7 +35,10 @@ body {
 	border-radius: 4px;
 }
 
-#zanr-tabs span {
+#zanr-tabs {
+	margin-bottom: 3px;
+}
+#zanr-tabs > span {
     color: #FFF;
     background: #333;
     border-top-left-radius: 6px;
@@ -43,14 +46,31 @@ body {
     padding: 4px 12px;
 	cursor: pointer;
 	transition: 0.2s ease;
+	position: relative;
 }
-#zanr-tabs span:hover { background: #666; }
-#zanr-tabs span.active {
+#zanr-tabs > span:hover { background: #666; }
+#zanr-tabs > span.active {
     color: #FFF;
     background: #bb153b;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     padding: 4px 12px;
+}
+
+#zanr-tabs > span > span {
+	padding: 0px 16px 0px 0px;
+}
+#zanr-tabs > span > input {
+	background: transparent;
+	right: 0;
+	top: 2px;
+	position: absolute;
+	padding: 0px 8px;
+}
+
+#zanr-tabs > span > input:hover {
+	background: #BB153B;
+	transition: 0.2s ease;
 }
 
 .zanr.active {
@@ -82,9 +102,10 @@ input[type=button]:hover {
 }
 
 select {
-	padding: 3px 4px;
+	padding: 0px 4px;
 	border-radius: 4px;
 	border: none;
+	margin-top: 2px;
 }
 
 .book-inputs-container input:nth-child(2) {
@@ -107,8 +128,23 @@ table input {
 table td:last-child, table th:last-child {
 	min-width: 90px;
 	max-width: 90px;
+	width: 90px;
 }
 
+@media only screen and (min-width: 1320px) {
+	.book-inputs-container {
+		display: flex;
+	}
+	.book-inputs-container input, .book-inputs-container select {
+		flex: 1;
+	}
+
+}
+@media only screen and (max-width: 1319px) {
+	.container {
+		width: 800px;
+	}
+}
 @media only screen and (max-width: 850px) {
 	.container {
 		width: 100%;
