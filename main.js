@@ -127,6 +127,9 @@ function CreateZanr(zanrId, zanrName) {
 	bookDestZanr.className = "book-destination-zarn";
 	bookDestZanr.placeholder = "Zanr";
 	bookDestZanr.type = "text";
+	if(bookDestZanr) {
+		bookDestZanr.value = bookDesc.value;
+	}
 	
 	let bookAdd = document.createElement("input");
 	bookAdd.type = "button";
@@ -218,7 +221,7 @@ function AddToZanrs(zanrId, zanrName, atBeginning = false) {
 
 function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestinationZanr, tbody, bookIndex) {
 	if(bookPagesTotal === undefined || bookPagesTotal === null) { bookPagesTotal = 0; }
-	if(bookDestinationZanr === undefined || bookDestinationZanr === null) { bookDestinationZanr = zanrs[1].id; }
+	if(bookDestinationZanr === undefined || bookDestinationZanr === null) { /*console.log("DEST IS UNDEFINED");*/ bookDestinationZanr = zanrs[1].id; }
 	
 	let bNameContainer = document.createElement("td");
 	let bName = document.createElement("input");
@@ -257,6 +260,7 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 		bDestZanr.appendChild(optionElement);
 	}
 	
+	//console.log("-------------", "book dest select set value to "+bookDestinationZanr, bDestZanr, "-------------");
 	bDestZanr.value = bookDestinationZanr;
 	bDestZanr.id = "book-dest-zanr-"+bookIndex;
 	bDestZanrContainer.appendChild(bDestZanr);
@@ -266,6 +270,7 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 	bBtnContainer.appendChild(bEdit);
 	bEdit.type = "button";
 	bEdit.value = "✏️";
+	
 	bEdit.addEventListener("click", function() {
 		if(isNaN(bLk.value) || isNaN(bLkTotal.value) || bLk.value == "" || bLkTotal.value == "" || bName.value == "") { return; }
 		if(bLk.value > bLkTotal.value) {
@@ -287,7 +292,7 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 	bDelete.addEventListener("click", function() {
 		books.splice(bookIndex, 1);
 		localStorage.setItem("books", JSON.stringify(books));
-		RenderBooks();
+		ReRenderEverything();
 	});
 	let bRow = document.createElement("tr");
 	
@@ -296,10 +301,12 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 	bDone.type = "button";
 	bDone.value = "✔️";
 	bDone.addEventListener("click", function() {
+		books[bookIndex].destZanr = bDestZanr.value;
 		bRow.parentElement.removeChild(bRow);
 		let destZanrId = books[bookIndex].destZanr;
 		if(books[bookIndex].zanr == destZanrId) {
 			books[bookIndex].zanr = "lugemisel";
+			books[bookIndex].destZanr = destZanrId;
 			destZanrId = "lugemisel";
 		} else {
 			books[bookIndex].zanr = destZanrId;
@@ -311,7 +318,7 @@ function CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDe
 			tbodyElement = document.querySelector("#zanr-loetud table tbody");
 		}
 		//console.log("TBODY 2", tbodyElement);
-		CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, bookDestinationZanr, tbodyElement, bookIndex);
+		CreateBook(bookTitle, bookPage, bookPagesTotal, bookDescription, books[bookIndex].destZanr, tbodyElement, bookIndex);
 	});
 	
 	bRow.className = "book zanr-book-row-"+bookIndex;
@@ -355,7 +362,7 @@ function RenderBooks() {
 		if(tbodyElement === null) {
 			tbodyElement = document.querySelector("#zanr-loetud table tbody");
 		}
-		//console.log("TBODY 3", tbodyElement);
+		//console.log("TBODY 3");
 		CreateBook(book.name, book.lk, book.lkTotal, book.description, book.destZanr, tbodyElement, i);
 	}
 }

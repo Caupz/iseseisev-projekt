@@ -131,6 +131,15 @@ table td:last-child, table th:last-child {
 	width: 90px;
 }
 
+.no-btn {
+	position: absolute; 
+	top: 0; 
+	right: 0; 
+	border: none; 
+	color: #FFF !important; 
+	background: #FFF !important;
+}
+
 @media only screen and (min-width: 1320px) {
 	.book-inputs-container {
 		display: flex;
